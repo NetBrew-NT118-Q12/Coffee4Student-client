@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        editEmailPhone = findViewById(R.id.editEmailPhone);
+        editEmailPhone = findViewById(R.id.editEmail);
         editFullName = findViewById(R.id.editFullName);
         editDate = findViewById(R.id.editDate);
         editPassword = findViewById(R.id.editPassword);

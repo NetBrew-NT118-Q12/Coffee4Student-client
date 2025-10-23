@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        edtEmail = findViewById(R.id.edtEmail);
+        edtEmail = findViewById(R.id.edtEmailPhone);
         edtPassword = findViewById(R.id.edtPassword);
         btnSignIn = findViewById(R.id.btnSignIn);
         btnGoogle = findViewById(R.id.btnGoogle);

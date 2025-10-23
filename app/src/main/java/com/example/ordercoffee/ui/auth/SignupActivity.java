@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ordercoffee.R;
 import com.example.ordercoffee.data.network.ApiEndpoints;
 import com.example.ordercoffee.data.network.ApiRequest;
-import com.example.ordercoffee.untils.Validator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -18,7 +17,7 @@ import org.json.JSONObject;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private TextInputEditText editEmailPhone, editFullName, editDate, editPassword;
+    private TextInputEditText editEmail, editPhone, editFullName, editDate, editPassword;
     private Button btnSignUp;
     private ImageButton btnBack;
 
@@ -27,7 +26,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        editEmailPhone = findViewById(R.id.editEmailPhone);
+        editEmail = findViewById(R.id.editEmail);
+        editPhone = findViewById(R.id.editPhone);
         editFullName = findViewById(R.id.editFullName);
         editDate = findViewById(R.id.editDate);
         editPassword = findViewById(R.id.editPassword);
@@ -39,23 +39,14 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void signUp() {
-        String input = editEmailPhone.getText().toString().trim();
+        String email = editEmail.getText().toString().trim();
+        String phone = editPhone.getText().toString().trim();
         String fullName = editFullName.getText().toString().trim();
         String dob = editDate.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
 
-        if (input.isEmpty() || fullName.isEmpty() || dob.isEmpty() || password.isEmpty()) {
+        if (email.isEmpty() || phone.isEmpty() || fullName.isEmpty() || dob.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String email = null, phone = null;
-        if (Validator.isEmail(input)) {
-            email = input;
-        } else if (Validator.isPhone(input)) {
-            phone = input;
-        } else {
-            Toast.makeText(this, "Email hoặc số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
         }
 

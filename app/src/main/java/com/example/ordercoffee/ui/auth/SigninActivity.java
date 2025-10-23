@@ -20,13 +20,14 @@ import com.example.ordercoffee.data.network.ApiEndpoints;
 import com.example.ordercoffee.data.network.ApiRequest;
 import com.example.ordercoffee.ui.home.HomeActivity;
 import com.example.ordercoffee.untils.SharedPref;
+import com.example.ordercoffee.untils.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity {
+public class SigninActivity extends AppCompatActivity {
 
-    private EditText edtEmail, edtPassword;
+    private EditText edtEmailPhone, edtPassword;
     private Button btnSignIn, btnGoogle, btnFacebook;
     private TextView txtSignup, txtForgotPassword;
     private SharedPref sharedPref;
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Ánh xạ view
-        edtEmail = findViewById(R.id.edtEmail);
+        edtEmailPhone = findViewById(R.id.edtEmailPhone);
         edtPassword = findViewById(R.id.edtPassword);
         btnSignIn = findViewById(R.id.btnSignIn);
         btnGoogle = findViewById(R.id.btnGoogle);
@@ -61,23 +62,37 @@ public class LoginActivity extends AppCompatActivity {
 
         // Chuyển sang trang đăng ký
         txtSignup.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+            Intent intent = new Intent(SigninActivity.this, SignupActivity.class);
             startActivity(intent);
         });
     }
 
     private void signIn() {
-        String email = edtEmail.getText().toString().trim();
+        String input = edtEmailPhone.getText().toString().trim();  // Có thể là email hoặc phone
         String password = edtPassword.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập Email và Mật khẩu", Toast.LENGTH_SHORT).show();
+        if (input.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập Email/Số điện thoại và Mật khẩu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra xem input là email hay số điện thoại
+        // Kiểm tra định dạng bằng Validator
+        boolean isEmail = Validator.isEmail(input);
+        boolean isPhone = Validator.isPhone(input);
+
+        if (!isEmail && !isPhone) {
+            Toast.makeText(this, "Định dạng không hợp lệ! Hãy nhập Email hoặc Số điện thoại", Toast.LENGTH_SHORT).show();
             return;
         }
 
         JSONObject loginData = new JSONObject();
         try {
-            loginData.put("email", email);
+            if (isEmail) {
+                loginData.put("email", input);
+            } else {
+                loginData.put("phone", input);
+            }
             loginData.put("password", password);
         } catch (JSONException e) {
             Toast.makeText(this, "Lỗi tạo JSON", Toast.LENGTH_SHORT).show();
@@ -94,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (success) {
                             String id = response.optString("id", "");
                             String name = response.optString("name", "");
+                            String email = response.optString("email", "");
                             String token = response.optString("token", "");
 
                             User user = new User(id, name, email, token);
@@ -115,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
         );
     }
+
 
     // Ẩn bàn phím khi bấm ngoài EditText
     @Override
